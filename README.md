@@ -5,13 +5,13 @@
 
 ## Featured Projects
 
-### [Learning Management System (LMS)](./Learning-Management-System)
+### [Learning Management System (LMS)](./Learning_Management_System)
 * **Tech Stack:** C# .NET Core, SQL Server.
 * **Key Features:**
     * Role-based access control for Admins, Instructors, and Students.
     * Course management and secure user authentication.
     * Optimized database schema for educational records.
-* **[View Project Files](./Learning-Management-System)**
+* **[View Project Files](./Learning_Management_System)**
 
 ---
 
