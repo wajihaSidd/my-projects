@@ -25,7 +25,7 @@
 * **Key Features:** * Meteorological data management using custom Linked Lists.
     * Optimized search functionality using **Binary Search ($O(\log n)$)**.
     * CRUD operations for weather record maintenance.
-* **[View Project Files](./src)**
+* **[View Project Files](./softwareHouse_Management_System)**
 
 ---
 
