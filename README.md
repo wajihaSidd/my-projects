@@ -15,13 +15,13 @@
 
 ---
 
-### [Software House Management System](./softwareHouse-Management-System)
+### [Software House Management System](./SoftwareHouse-Management-System)
 * **Tech Stack:** Node.js, Express.js, PostgreSQL, Chart.js, HTML/CSS/JS.
 * **Key Features:**
     * Full-stack system for tracking employee tasks and projects.
     * Dynamic dashboard with data visualization using Chart.js.
     * RESTful API integration with a relational database.
-* **[View Project Files](./softwareHouse-Management-System)**
+* **[View Project Files](./SoftwareHouse-Management-System)**
 
 ---
 
