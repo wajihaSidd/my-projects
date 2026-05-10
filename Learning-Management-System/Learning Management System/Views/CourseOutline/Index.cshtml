@@ -1,0 +1,158 @@
+﻿@model IEnumerable<Learning_Management_System.Models.ENTITIES.CourseOutline>
+
+@{
+    ViewData["Title"] = "Manage Course Outline";
+    var courseId = ViewBag.CourseId;
+    var courseTitle = ViewBag.CourseTitle;
+    var courseCode = ViewBag.CourseCode;
+}
+
+<div class="container mt-4">
+    <div class="card recap-card">
+        <div class="card-header recap-header d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+                <i class="fas fa-list-alt"></i> @courseTitle (@courseCode) - Course Outline Management
+            </h4>
+            <a asp-action="Create" asp-route-courseId="@courseId" class="btn btn-light">
+                <i class="fas fa-plus"></i> Add New Outline
+            </a>
+        </div>
+
+        <div class="card-body">
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show recap-alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show recap-alert">
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped recap-table">
+                        <thead>
+                            <tr>
+                                <th>Week</th>
+                                <th>Weekly Plan</th>
+                                <th>Topic</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var outline in Model.OrderBy(o => o.WeekNumber))
+                            {
+                                <tr>
+                                    <td class="text-center fw-bold">@outline.WeekNumber</td>
+                                    <td>@outline.WeeklyPlan</td>
+                                    <td>@outline.Topic</td>
+                                    <td>@outline.Description</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="Edit"
+                                               asp-route-id="@outline.CourseOutlineId"
+                                               class="btn btn-warning btn-sm">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info recap-alert">
+                    <i class="fas fa-info-circle"></i> No course outline created yet.
+                    <a asp-action="Create" asp-route-courseId="@courseId" class="alert-link">
+                        Create your first outline
+                    </a>.
+                </div>
+            }
+
+            <div class="mt-3">
+                <a asp-controller="FacultyDashboard"
+                   asp-action="Index"
+                   class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Card */
+    .recap-card {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    /* Header */
+    .recap-header {
+        background-color: royalblue;
+        color: white;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    /* Table */
+    .recap-table thead th {
+        background-color: royalblue;
+        color: white;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .recap-table tbody tr {
+        background-color: #f9f9f9;
+        transition: background-color 0.3s ease;
+    }
+
+    .recap-table tbody tr:nth-child(even) {
+        background-color: #e9f1ff;
+    }
+
+    .recap-table tbody tr:hover {
+        background-color: #d0e4ff;
+    }
+
+    /* Alerts */
+    .recap-alert {
+        border-radius: 8px;
+    }
+
+    /* Buttons */
+    .btn-group .btn {
+        margin-right: 5px;
+        border-radius: 4px;
+    }
+    /* Edit button custom */
+    .btn-group .btn-warning.btn-sm {
+        background-color: #0d6efd;
+        color: white;
+        border-color: #0d6efd;
+        padding: 6px 15px; /* size */
+        font-weight: 600;
+        font-size: 0.9rem;
+        border-radius: 6px;
+        transition: background-color 0.2s, transform 0.2s;
+    }
+
+        .btn-group .btn-warning.btn-sm:hover {
+            background-color: #0b5ed7; /* Darker blue on hover */
+            border-color: #0b5ed7;
+            transform: translateY(-1px);
+</style>

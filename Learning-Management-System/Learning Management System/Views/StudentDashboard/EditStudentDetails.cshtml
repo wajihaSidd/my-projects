@@ -1,0 +1,521 @@
+﻿@model Learning_Management_System.Models.ENTITIES.StudentDetails
+@{
+    ViewData["Title"] = "Edit Personal Information";
+    var studentName = Context.Session.GetString("StudentName") ?? "Student";
+}
+
+<div class="container mt-4">
+
+    <!-- Welcome Alert -->
+    <div class="welcome-box text-center p-4 mb-4 shadow-sm rounded-4">
+        <h1>Welcome, @studentName!</h1>
+        <p>Select an option from the "Courses" menu to view your current semester courses or available courses.</p>
+    </div>
+
+    <!-- Picture and All Three Boxes Row -->
+    <div class="d-flex flex-wrap align-items-start gap-4 mb-4">
+        <!-- Picture Section -->
+        <div class="picture-section">
+            <form asp-action="UploadPicture" method="post" enctype="multipart/form-data">
+                <div class="profile-picture-container">
+                    <img src="@(Model?.ProfilePicture != null && Model.ProfilePicture.Length > 0 ? $"data:image/png;base64,{Convert.ToBase64String(Model.ProfilePicture)}" : "/images/default-profile.png")"
+                         alt="Profile Picture"
+                         class="profile-picture" />
+
+                    <div class="upload-overlay">
+                        <span>Click to Choose File</span>
+                        <input type="file" name="picture" class="file-input" />
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success mt-3 upload-btn">Upload / Save Picture</button>
+            </form>
+        </div>
+
+        <!-- All Three Boxes in a Column -->
+        <div class="d-flex flex-column gap-3" style="flex: 1; min-width: 300px;">
+            <!-- Personal Information and Academic Record in One Row -->
+            <div class="d-flex gap-3 mb-3">
+                <!-- Personal Information Box -->
+                <a href="@Url.Action("Index", "StudentDashboard")" class="info-box" style="flex: 1;">
+                    <div class="box-title">Personal Information</div>
+                    <div class="box-content">
+                        @if (Model != null)
+                        {
+                            @Model.FirstName @Model.LastName
+                        }
+                        else
+                        {
+                            <text>Not Added</text>
+                        }
+                    </div>
+                </a>
+
+                <!-- Academic Record Box -->
+                <a href="@Url.Action("AcademicRecord", "StudentDashboard")" class="info-box" style="flex: 1;">
+                    <div class="box-title">Academic Record</div>
+                    <div class="box-content">View Academic Record</div>
+                </a>
+            </div>
+
+            <!-- Student Summary Box -->
+            <div class="info-box summary-box" style="cursor: default;">
+                <div class="box-title">Student Information</div>
+                <div class="box-content text-start">
+                    <table class="summary-table">
+                        <tbody>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Registration Number</th>
+                                <th>Email</th>
+                            </tr>
+                            <tr class="light-row">
+                                <td>@studentName</td>
+                                <td>@Model.RegistrationNumber</td>
+                                <td>@Model.Email</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Title -->
+    <div class="welcome-box text-center p-4 mb-4 shadow-sm rounded-4">
+        <h2>✏️ Edit Personal Information</h2>
+        <p>Update your personal and father's details below.</p>
+    </div>
+
+    <!-- Alerts -->
+    @if (TempData["PersonalErrorMessage"] != null)
+    {
+        <div class="alert alert-danger mb-4">@TempData["PersonalErrorMessage"]</div>
+    }
+    <!-- Edit Form in Two Columns -->
+    <form asp-action="EditStudentDetails" method="post" class="mb-4">
+        <input type="hidden" asp-for="StudentDetailsId" />
+        <input type="hidden" asp-for="StudentId" />
+        <input type="hidden" asp-for="RegistrationNumber" />
+        <input type="hidden" asp-for="Email" />
+
+        <div class="d-flex gap-4 flex-wrap mb-4">
+            <!-- Student Details Form Box -->
+            <div class="detail-box" style="flex: 1;">
+                <h4 class="box-heading">Student Details</h4>
+                <div class="form-fields">
+                    <div class="mb-3">
+                        <label asp-for="FirstName" class="form-label">First Name *</label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="MiddleName" class="form-label">Middle Name</label>
+                        <input asp-for="MiddleName" class="form-control" />
+                        <span asp-validation-for="MiddleName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="LastName" class="form-label">Last Name *</label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="DateOfBirth" class="form-label">Date of Birth</label>
+                        <input asp-for="DateOfBirth" type="date" class="form-control" />
+                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="NIC" class="form-label">NIC</label>
+                        <input asp-for="NIC" class="form-control" />
+                        <span asp-validation-for="NIC" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Gender" class="form-label">Gender</label>
+                        <select asp-for="Gender" class="form-select">
+                            <option value="">-- Select Gender --</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="BloodGroup" class="form-label">Blood Group</label>
+                        <input asp-for="BloodGroup" class="form-control" />
+                        <span asp-validation-for="BloodGroup" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Religion" class="form-label">Religion</label>
+                        <input asp-for="Religion" class="form-control" />
+                        <span asp-validation-for="Religion" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input asp-for="HasDomicile" class="form-check-input" />
+                        <label asp-for="HasDomicile" class="form-check-label">Has Domicile</label>
+                        <span asp-validation-for="HasDomicile" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Father Details Form Box -->
+            <div class="detail-box" style="flex: 1;">
+                <h4 class="box-heading">Father Details</h4>
+                <div class="form-fields">
+                    <div class="mb-3">
+                        <label asp-for="FathersName" class="form-label">Father's Name *</label>
+                        <input asp-for="FathersName" class="form-control" />
+                        <span asp-validation-for="FathersName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="FathersCNIC" class="form-label">Father's CNIC</label>
+                        <input asp-for="FathersCNIC" class="form-control" />
+                        <span asp-validation-for="FathersCNIC" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="FathersOccupation" class="form-label">Father's Occupation</label>
+                        <input asp-for="FathersOccupation" class="form-control" />
+                        <span asp-validation-for="FathersOccupation" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="FathersOrganization" class="form-label">Father's Organization</label>
+                        <input asp-for="FathersOrganization" class="form-control" />
+                        <span asp-validation-for="FathersOrganization" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="OrganizationPhone1" class="form-label">Organization Phone</label>
+                        <input asp-for="OrganizationPhone1" class="form-control" />
+                        <span asp-validation-for="OrganizationPhone1" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="FathersEmail" class="form-label">Father's Email</label>
+                        <input asp-for="FathersEmail" type="email" class="form-control" />
+                        <span asp-validation-for="FathersEmail" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Buttons -->
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success px-4 py-2" style="border-radius: 8px; font-weight: 600;">
+                <i class="bi bi-check-circle me-2"></i>Save Changes
+            </button>
+            <a asp-action="Index" class="btn btn-secondary px-4 py-2" style="border-radius: 8px; font-weight: 600;">
+                <i class="bi bi-x-circle me-2"></i>Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+<style>
+    /* Welcome Box */
+    .welcome-box {
+        background: linear-gradient(135deg, #4169E1, #5A7FFF);
+        color: white;
+        border-radius: 15px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        transition: transform 0.2s;
+    }
+
+        .welcome-box:hover {
+            transform: translateY(-3px);
+        }
+
+    /* Picture Section */
+    .picture-section {
+        flex-shrink: 0;
+    }
+
+    /* Picture Box */
+    .profile-picture-container {
+        width: 250px;
+        height: 250px;
+        padding: 10px;
+        border-radius: 12px;
+        border: 2px solid #ddd;
+        background: #fafafa;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        transition: 0.3s ease-in-out;
+    }
+
+    .profile-picture {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 8px;
+        background: white;
+    }
+
+    .upload-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+        background: rgba(0,0,0,0.45);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.35s;
+        font-weight: bold;
+        font-size: 15px;
+    }
+
+    .profile-picture-container:hover .upload-overlay {
+        opacity: 1;
+        cursor: pointer;
+    }
+
+    .file-input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+    }
+
+    .upload-btn {
+        width: 250px;
+        font-weight: bold;
+        border-radius: 8px;
+    }
+
+    /* Info Box Buttons */
+    .info-box {
+        background-color: #4169E1;
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        min-height: 120px;
+    }
+
+        .info-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+            text-decoration: none;
+            color: white;
+        }
+
+    .summary-box:hover {
+        transform: none !important;
+        cursor: default !important;
+    }
+
+    .box-title {
+        font-weight: 600;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .box-content {
+        font-size: 16px;
+    }
+
+    /* Student Summary Table */
+    .summary-table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    }
+
+        .summary-table th, .summary-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .summary-table th {
+            background-color: #4169E1;
+            color: white;
+            font-weight: 600;
+        }
+
+        .summary-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Light blue row with black text */
+        .summary-table tr.light-row {
+            background-color: #e7efff;
+            color: black;
+        }
+
+    /* Detail Boxes */
+    .detail-box {
+        flex: 1;
+        min-width: 250px;
+        background-color: #f0f4ff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .detail-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        }
+
+    .box-heading {
+        background-color: #4169E1;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+
+    /* Form Fields Styling */
+    .form-fields .form-label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    .form-fields .form-control,
+    .form-fields .form-select {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 8px 12px;
+        background-color: white;
+        transition: all 0.3s ease;
+    }
+
+        .form-fields .form-control:focus,
+        .form-fields .form-select:focus {
+            border-color: #4169E1;
+            box-shadow: 0 0 0 0.2rem rgba(65, 105, 225, 0.25);
+        }
+
+    .form-fields .form-check-input {
+        margin-top: 0.3rem;
+        margin-right: 0.5rem;
+    }
+
+    .form-fields .form-check-label {
+        font-weight: 500;
+    }
+
+    .text-danger {
+        font-size: 0.875rem;
+        margin-top: 4px;
+    }
+
+    /* Alerts */
+    .alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+        border-radius: 8px;
+        padding: 12px 15px;
+    }
+
+    /* Buttons */
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+        color: white;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 600;
+        transition: transform 0.2s, background-color 0.2s;
+    }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: white;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 600;
+        transition: transform 0.2s, background-color 0.2s;
+    }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            background-color: #565e64;
+            border-color: #565e64;
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .d-flex.flex-wrap {
+            flex-direction: column;
+        }
+
+        .picture-section {
+            align-self: center;
+        }
+
+        .d-flex.flex-column {
+            align-items: center;
+        }
+
+        .d-flex.gap-3.mb-3 {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .info-box {
+            width: 100%;
+        }
+
+        .detail-box {
+            width: 100%;
+        }
+
+        .d-flex.gap-4.flex-wrap.mb-4 {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<script>
+    function previewFile(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.querySelector('.profile-picture-container img').src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

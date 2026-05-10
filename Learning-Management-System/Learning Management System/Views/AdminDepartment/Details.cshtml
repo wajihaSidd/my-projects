@@ -1,0 +1,88 @@
+﻿@model Learning_Management_System.Models.ENTITIES.Department
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary fw-bold">@Model.Name - Details</h2>
+        <a asp-action="Index" class="btn btn-secondary shadow-sm">← Back to Departments</a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white fw-bold">Faculty</div>
+                <div class="card-body">
+                    @if (Model.Faculty.Any())
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var f in Model.Faculty)
+                            {
+                                <li class="list-group-item">@f.Name</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>No faculty assigned.</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-success text-white fw-bold">Students</div>
+                <div class="card-body">
+                    @if (Model.Students.Any())
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var s in Model.Students)
+                            {
+                                <li class="list-group-item">@s.Name</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>No students enrolled.</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-warning text-white fw-bold">Courses</div>
+                <div class="card-body">
+                    @if (Model.Courses.Any())
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var c in Model.Courses)
+                            {
+                                <li class="list-group-item">@c.Title</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>No courses assigned.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card-header {
+        font-size: 1.1rem;
+    }
+
+    .card {
+        border-radius: 12px;
+    }
+
+    .list-group-item {
+        border: none;
+        padding: 0.5rem 0;
+    }
+</style>

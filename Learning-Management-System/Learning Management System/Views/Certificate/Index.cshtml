@@ -1,0 +1,81 @@
+﻿@model List<Learning_Management_System.Models.ENTITIES.Students>
+
+<style>
+    h2 {
+        margin-bottom: 20px;
+        color: #0d6efd;
+        font-weight: 700;
+    }
+
+    .table {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+        .table th {
+            background-color: #0d6efd;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+            padding: 12px 15px;
+        }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 12px;
+        transition: all 0.2s;
+    }
+
+        .btn-primary:hover {
+            background-color: #0069d9;
+        }
+
+    @@media (max-width: 768px) {
+        .table-responsive
+
+    {
+        overflow-x: auto;
+    }
+
+    .btn-primary {
+        width: 100%;
+        margin-bottom: 6px;
+    }
+
+    }
+</style>
+
+<h2>Generate Certificates</h2>
+
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var s in Model)
+            {
+                <tr>
+                    <td>@s.Name</td>
+                    <td>@s.Department.Name</td>
+                    <td>
+                        <a class="btn btn-primary" href="@Url.Action("GenerateForm", "Certificate", new { studentId = s.StudentId })">
+                            Generate Certificate
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

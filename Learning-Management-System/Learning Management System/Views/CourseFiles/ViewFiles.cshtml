@@ -1,0 +1,86 @@
+﻿@model List<Learning_Management_System.Models.ENTITIES.CourseFiles>
+
+@{
+    ViewData["Title"] = "Uploaded Files";
+}
+
+<h2>Uploaded Files</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning">No files uploaded yet.</div>
+}
+else
+{
+    <h4>📘 Course Materials</h4>
+
+    var materials = Model
+        .Where(x => x.Category == Learning_Management_System.Models.ENTITIES.CourseFileCategory.Material)
+        .OrderBy(x => x.WeekNumber)
+        .ToList();
+
+    if (materials.Any())
+    {
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Week</th>
+                    <th>Title</th>
+                    <th>File Name</th>
+                    <th>Download</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var f in materials)
+                {
+                    <tr>
+                        <td>@f.WeekNumber</td>
+                        <td>@f.Title</td>
+                        <td>@f.FileName</td>
+                        <td><a href="@f.FilePath" download class="btn btn-sm btn-primary">Download</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info">No course materials uploaded yet.</div>
+    }
+
+    <h4 class="mt-4">📝 Assignments</h4>
+
+    var assignments = Model
+        .Where(x => x.Category == Learning_Management_System.Models.ENTITIES.CourseFileCategory.Assignment)
+        .OrderBy(x => x.WeekNumber)
+        .ToList();
+
+    if (assignments.Any())
+    {
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Week</th>
+                    <th>Title</th>
+                    <th>File Name</th>
+                    <th>Download</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var f in assignments)
+                {
+                    <tr>
+                        <td>@f.WeekNumber</td>
+                        <td>@f.Title</td>
+                        <td>@f.FileName</td>
+                        <td><a href="@f.FilePath" download class="btn btn-sm btn-primary">Download</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info">No assignments uploaded yet.</div>
+    }
+}

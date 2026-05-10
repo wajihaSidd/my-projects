@@ -1,0 +1,99 @@
+﻿@model IEnumerable<Learning_Management_System.Models.ENTITIES.Faculty>
+
+@{
+    ViewData["Title"] = "Faculty List";
+}
+
+<!-- TempData Popups -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="popup success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="popup error">@TempData["ErrorMessage"]</div>
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between mb-3">
+        <h2 class="text-primary fw-bold">👨‍🏫 Faculty Members</h2>
+        <a href="/AdminFaculty/Create" class="btn btn-success">+ Add Faculty</a>
+    </div>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Department</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var fc in Model)
+            {
+                <tr>
+                    <td>@fc.FacultyId</td>
+                    <td>@fc.Name</td>
+                    <td>@fc.Email</td>
+                    <td>@fc.Department</td>
+                    <td class="text-center">
+                        <a href="/AdminFaculty/Edit/@fc.FacultyId" class="btn btn-primary btn-sm">Edit</a>
+                        <a href="/AdminFaculty/Delete/@fc.FacultyId"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Delete this faculty?');">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .popup {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 25px;
+        border-radius: 8px;
+        color: #fff;
+        font-weight: 600;
+        z-index: 9999;
+        opacity: 0;
+        animation: fadeInOut 3s forwards;
+    }
+
+        .popup.success {
+            background: #4caf50;
+        }
+
+        .popup.error {
+            background: #f44336;
+        }
+
+    @@keyframes fadeInOut {
+        0% {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        10% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        90% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        100% {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+    }
+</style>

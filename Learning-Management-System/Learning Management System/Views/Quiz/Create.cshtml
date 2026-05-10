@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Create Quiz";
+    var courseId = ViewBag.CourseId;
+}
+
+<h2>Create New Quiz</h2>
+
+<form asp-action="Create" method="post">
+    <input type="hidden" name="courseId" value="@courseId" />
+
+    <div class="mb-3">
+        <label for="title" class="form-label">Quiz Title</label>
+        <input type="text" class="form-control" id="title" name="title" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Quiz</button>
+    <a href="@Url.Action("Index", "Quiz", new { courseId })" class="btn btn-secondary">Back</a>
+</form>

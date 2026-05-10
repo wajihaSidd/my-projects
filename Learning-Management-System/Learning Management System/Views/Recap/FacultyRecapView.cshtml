@@ -1,0 +1,86 @@
+﻿@model List<Learning_Management_System.Models.ENTITIES.Recap>
+
+@{
+    ViewData["Title"] = "Faculty Recap - Course";
+}
+
+<h2 class="text-center bg-dark text-white p-2">Course Recap - @Model.FirstOrDefault()?.Course.Title</h2>
+
+@foreach (var studentRecap in Model)
+{
+    <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+            <strong>@studentRecap.Student.Name (@studentRecap.Student.RollNumber)</strong>
+            - @studentRecap.Student.Department?.Name
+            <a class="btn btn-success btn-sm float-right"
+               href="@Url.Action("EditMarks", "Recap", new { courseId = studentRecap.CourseId, studentId = studentRecap.StudentId })">
+                View / Edit Marks
+            </a>
+        </div>
+
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Marks Type</th>
+                        <th>Max Marks</th>
+                        <th>Obtained Marks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var quiz in studentRecap.Quizzes)
+                    {
+                        <tr>
+                            <td>@quiz.Title</td>
+                            <td>@quiz.MaxMarks</td>
+                            <td>@(quiz.MarksObtained.HasValue? quiz.MarksObtained.ToString() : "Not Entered")</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td><strong>Quiz Total</strong></td>
+                        <td>@studentRecap.Quizzes.Sum(q => q.MaxMarks)</td>
+                        <td>@studentRecap.Quizzes.Sum(q => q.MarksObtained ?? 0)</td>
+                    </tr>
+
+                    @foreach (var assignment in studentRecap.Assignments)
+                    {
+                        <tr>
+                            <td>@assignment.Title</td>
+                            <td>@assignment.MaxMarks</td>
+                            <td>@(assignment.MarksObtained.HasValue? assignment.MarksObtained.ToString() : "Not Entered")</td>
+                        </tr>
+                    }
+                <tr>
+                    <td><strong>Assignment Total</strong></td>
+                    <td>@studentRecap.Assignments.Sum(a => a.MaxMarks)</td>
+                    <td>@studentRecap.Assignments.Sum(a => a.MarksObtained ?? 0)</td>
+                </tr>
+
+                <tr>
+                    <td>Mid Exam</td>
+                    <td>30</td>
+                    <td>@(studentRecap.MidMarks.HasValue? studentRecap.MidMarks.ToString() : "Not Entered")</td>
+                </tr>
+                <tr>
+                    <td>Final Exam</td>
+                    <td>30</td>
+                    <td>@(studentRecap.FinalMarks.HasValue? studentRecap.FinalMarks.ToString() : "Not Entered")</td>
+                </tr>
+                <tr class="table-success">
+                    <td><strong>Total</strong></td>
+                    <td>100</td>
+                    <td>
+                        @(
+                                                studentRecap.Quizzes.Sum(q => q.MarksObtained ?? 0) +
+                                                studentRecap.Assignments.Sum(a => a.MarksObtained ?? 0) +
+                                                (studentRecap.MidMarks ?? 0) +
+                                                (studentRecap.FinalMarks ?? 0)
+                                                )
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+     
+    </div>
+</div>
+}

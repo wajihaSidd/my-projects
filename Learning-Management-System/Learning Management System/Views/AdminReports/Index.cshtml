@@ -1,0 +1,162 @@
+﻿@{
+    ViewData["Title"] = "Reports Center";
+}
+
+<h2 class="mb-4 text-primary">Reports Center</h2>
+
+<div class="row g-4">
+    <!-- Student Enrollment by Department -->
+    <div class="col-md-6">
+        <div class="card p-4 shadow-sm rounded-4">
+            <h5 class="mb-3">Students by Department</h5>
+            <canvas id="studentDeptChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Faculty Count by Department -->
+    <div class="col-md-6">
+        <div class="card p-4 shadow-sm rounded-4">
+            <h5 class="mb-3">Faculty by Department</h5>
+            <canvas id="facultyDeptChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mt-1">
+    <!-- Courses per Faculty -->
+    <div class="col-md-6">
+        <div class="card p-4 shadow-sm rounded-4">
+            <h5 class="mb-3">Courses per Faculty</h5>
+            <canvas id="coursesFacultyChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Attendance per Course -->
+    <div class="col-md-6">
+        <div class="card p-4 shadow-sm rounded-4">
+            <h5 class="mb-3">Attendance per Course (%)</h5>
+            <canvas id="attendanceCourseChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<style>
+    canvas {
+        max-height: 300px; /* professional dashboard height */
+        width: 100% !important;
+    }
+
+    h5 {
+        font-weight: 600;
+        color: #4e73df;
+    }
+
+    .card {
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+</style>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function createGradient(ctx, startColor, endColor) {
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, startColor);
+            gradient.addColorStop(1, endColor);
+            return gradient;
+        }
+
+        // 1️⃣ Students by Department
+        const studentData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.StudentByDept));
+        const ctxStudent = document.getElementById('studentDeptChart').getContext('2d');
+        new Chart(ctxStudent, {
+            type: 'bar',
+            data: {
+                labels: studentData.map(x => x.Department),
+                datasets: [{
+                    label: 'Students',
+                    data: studentData.map(x => x.Count),
+                    backgroundColor: studentData.map(() => createGradient(ctxStudent, '#4e73df', '#1cc88a')),
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { mode: 'index', intersect: false }
+                },
+                scales: {
+                    y: { beginAtZero: true },
+                    x: { ticks: { font: { size: 14 } } }
+                }
+            }
+        });
+
+        // 2️⃣ Faculty by Department (Doughnut)
+        const facultyData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.FacultyByDept));
+        const ctxFaculty = document.getElementById('facultyDeptChart').getContext('2d');
+        new Chart(ctxFaculty, {
+            type: 'doughnut',
+            data: {
+                labels: facultyData.map(x => x.Department),
+                datasets: [{
+                    data: facultyData.map(x => x.Count),
+                    backgroundColor: ['#1cc88a','#36b9cc','#4e73df','#f6c23e','#e74a3b','#858796'],
+                    hoverOffset: 15
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'bottom', labels: { font: { size: 13 } } } }
+            }
+        });
+
+        // 3️⃣ Courses per Faculty
+        const coursesData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.CoursesPerFaculty));
+        const ctxCourses = document.getElementById('coursesFacultyChart').getContext('2d');
+        new Chart(ctxCourses, {
+            type: 'bar',
+            data: {
+                labels: coursesData.map(x => x.FacultyName),
+                datasets: [{
+                    label: 'Courses',
+                    data: coursesData.map(x => x.CoursesCount),
+                    backgroundColor: coursesData.map(() => createGradient(ctxCourses, '#f6c23e', '#dda20a')),
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+                scales: { y: { beginAtZero: true }, x: { ticks: { font: { size: 14 } } } }
+            }
+        });
+
+        // 4️⃣ Attendance per Course
+        const attendanceData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.AttendancePerCourse));
+        const ctxAttendance = document.getElementById('attendanceCourseChart').getContext('2d');
+        new Chart(ctxAttendance, {
+            type: 'bar',
+            data: {
+                labels: attendanceData.map(x => x.CourseTitle),
+                datasets: [{
+                    label: 'Attendance (%)',
+                    data: attendanceData.map(x => x.AverageAttendance.toFixed(2)),
+                    backgroundColor: attendanceData.map(() => createGradient(ctxAttendance, '#36b9cc', '#1cc88a')),
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+                scales: { y: { beginAtZero: true, max: 100 }, x: { ticks: { font: { size: 14 } } } }
+            }
+        });
+    </script>
+}

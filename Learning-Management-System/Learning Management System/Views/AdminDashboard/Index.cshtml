@@ -1,0 +1,151 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+
+
+<!-- Top Header with Logout -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-primary">Admin Dashboard</h2>
+
+   
+</div>
+
+<div class="row g-3">
+
+    <!-- Statistics Cards -->
+    <div class="col-md-3">
+        <div class="card text-white bg-primary shadow-sm rounded-4 p-3">
+            <h5>Total Students</h5>
+            <h2>@ViewBag.StudentCount</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-white bg-success shadow-sm rounded-4 p-3">
+            <h5>Total Faculty</h5>
+            <h2>@ViewBag.FacultyCount</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-white bg-info shadow-sm rounded-4 p-3">
+            <h5>Total Departments</h5>
+            <h2>@ViewBag.DepartmentCount</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-white bg-warning shadow-sm rounded-4 p-3">
+            <h5>Total Courses</h5>
+            <h2>@ViewBag.CourseCount</h2>
+        </div>
+    </div>
+
+</div>
+
+<hr class="my-4" />
+
+<h3 class="mb-3 text-secondary">Admin Functions</h3>
+
+<div class="row g-4">
+
+    <!-- Manage Courses -->
+    <div class="col-md-4">
+        <div class="card shadow-sm rounded-4 p-3 h-100 hover-shadow">
+            <h5>Manage Courses</h5>
+            <p>Create, update, delete courses.</p>
+            <a class="btn btn-primary w-100" href="/AdminCourses/Index">Go</a>
+        </div>
+    </div>
+
+    <!-- Assign Courses to Faculty -->
+    <div class="col-md-4">
+        <div class="card shadow-sm rounded-4 p-3 h-100 hover-shadow">
+            <h5>Assign Courses to Faculty</h5>
+            <p>Assign any course to any teacher.</p>
+            <a class="btn btn-secondary w-100" href="/AdminAssignFaculty/Assign">Go</a>
+        </div>
+    </div>
+
+    <!-- Manage Departments -->
+    <div class="col-md-4">
+        <div class="card shadow-sm rounded-4 p-3 h-100 hover-shadow">
+            <h5>Manage Departments</h5>
+            <p>Create/update departments.</p>
+            <a class="btn btn-info w-100" href="/AdminDepartment/Index">Go</a>
+        </div>
+    </div>
+
+    <!-- Manage Enrollments -->
+    <div class="col-md-4">
+        <div class="card shadow-sm rounded-4 p-3 h-100 hover-shadow">
+            <h5>Manage Enrollments</h5>
+            <p>Enroll students in specific courses.</p>
+            <a class="btn btn-success w-100" href="/Enrollments/Index">Go</a>
+        </div>
+    </div>
+
+    <!-- Manage Users & Roles -->
+    <div class="col-md-4">
+        <div class="card shadow-sm rounded-4 p-3 h-100 hover-shadow">
+            <h5>Manage Users & Roles</h5>
+            <p>Control user roles and permissions.</p>
+            <a class="btn btn-primary w-100" href="/AdminUser/Index">Go</a>
+        </div>
+    </div>
+
+    <!-- Attendance Records -->
+    <div class="col-md-4">
+        <div class="card shadow-sm rounded-4 p-3 h-100 hover-shadow">
+            <h5>Attendance Records</h5>
+            <p>View attendance submitted by faculty.</p>
+            <a class="btn btn-secondary w-100" href="/AdminAttendance/Index">Go</a>
+        </div>
+    </div>
+
+    <!-- Reports Center -->
+    <div class="col-md-4">
+        <div class="card shadow-sm rounded-4 p-3 h-100 hover-shadow">
+            <h5>Reports Center</h5>
+            <p>View students, faculty, attendance reports.</p>
+            <a class="btn btn-warning w-100" href="/AdminReports/Index">Go</a>
+        </div>
+    </div>
+
+    <!-- Certificates / Graduation -->
+    <div class="col-md-4">
+        <div class="card shadow-sm rounded-4 p-3 h-100 hover-shadow">
+            <h5>Certificates / Graduation</h5>
+            <p>Generate student certificates for courses or graduation.</p>
+            <a class="btn btn-dark w-100" href="/Certificate/Index">Go</a>
+        </div>
+    </div>
+
+  
+
+</div>
+
+<style>
+    .card {
+        border-radius: 12px;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .card:hover, .hover-shadow:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+    h2, h3, h5 {
+        font-weight: 600;
+    }
+
+    .btn {
+        border-radius: 8px;
+    }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+</style>

@@ -1,0 +1,12 @@
+﻿@model Learning_Management_System.Models.ENTITIES.QuizResult
+@{
+    ViewData["Title"] = "Quiz Result";
+}
+
+<h2>Result: @Model.Quiz.Title</h2>
+
+<div class="alert alert-info">
+    <strong>Marks Obtained:</strong> @Model.ObtainedMarks
+</div>
+
+<a asp-controller="QuizAttempt" asp-action="Index" class="btn btn-secondary">Back to Quizzes</a>

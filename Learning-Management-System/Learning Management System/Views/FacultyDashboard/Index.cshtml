@@ -1,0 +1,163 @@
+﻿@{
+    ViewData["Title"] = "Faculty Dashboard";
+}
+
+<div class="dashboard-container">
+
+    <!-- Welcome Section -->
+    <div class="welcome-card">
+        <h2>Welcome, @ViewBag.Name!</h2>
+        <h4>@ViewBag.Email</h4>
+    </div>
+
+    <!-- Main Dashboard Cards -->
+    <div class="card-grid">
+
+        <!-- Attendance Management -->
+        <a href="/Attendance/SelectCourse" class="dashboard-card card-attendance">
+            <div class="card-icon">📋</div>
+            <div class="card-title">Mark Attendance</div>
+            <div class="card-desc">Record students' attendance easily.</div>
+        </a>
+
+        <!-- Marks Recap, Course Outline & Upload Files Cards -->
+        @if (ViewBag.FacultyCourses != null)
+        {
+            var courses = ViewBag.FacultyCourses as List<Learning_Management_System.Models.ENTITIES.Courses>;
+            foreach (var course in courses)
+            {
+                <!-- Marks Recap Card -->
+                <a href="@Url.Action("FacultyRecap", "Recap", new { courseId = course.CourseId })" class="dashboard-card card-recap">
+                    <div class="card-icon">📝</div>
+                    <div class="card-title">@course.Title - Marks Recap</div>
+                    <div class="card-desc">View and assign marks for your students.</div>
+                </a>
+
+                <!-- Course Outline Management Card -->
+                <a href="@Url.Action("Index", "CourseOutline", new { courseId = course.CourseId })" class="dashboard-card card-outline">
+                    <div class="card-icon">📖</div>
+                    <div class="card-title">@course.Title - Manage Outline</div>
+                    <div class="card-desc">Add, edit, or delete weekly course outlines.</div>
+                </a>
+
+                <!-- Upload Course Files Card -->
+                <a href="@Url.Action("UploadFiles", "CourseFiles", new { courseId = course.CourseId })" class="dashboard-card card-files">
+                    <div class="card-icon">📂</div>
+                    <div class="card-title">@course.Title - Upload Files</div>
+                    <div class="card-desc">Upload course materials or assignments for your students.</div>
+                </a>
+
+                <!-- Quiz Management Card -->
+                <a asp-controller="Quiz" asp-action="Index" asp-route-courseId="@course.CourseId" class="dashboard-card card-quiz">
+                    <div class="card-icon">📝</div>
+                    <div class="card-title">@course.Title - Create Quiz</div>
+                    <div class="card-desc">Add a new quiz for this course.</div>
+                </a>
+            }
+        }
+
+    </div>
+</div>
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f6f9;
+        color: #333;
+    }
+
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 0 20px;
+    }
+
+    /* ---------------- Welcome Card ---------------- */
+    .welcome-card {
+        background-color: royalblue;
+        padding: 25px 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+        .welcome-card h2,
+        .welcome-card h4 {
+            color: white !important; /* ensures white text */
+            opacity: 1; /* removes greyish look */
+            margin: 0;
+        }
+
+        .welcome-card h2 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .welcome-card h4 {
+            font-weight: normal;
+            font-size: 1rem;
+        }
+
+    /* ---------------- Dashboard Cards ---------------- */
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+    }
+
+    .dashboard-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background-color: #fff;
+        padding: 25px 20px;
+        border-radius: 12px;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            background-color: #f0f8ff;
+        }
+
+    .card-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .card-desc {
+        font-size: 0.95rem;
+        opacity: 0.75;
+    }
+
+    .card-attendance {
+        border-left: 5px solid #28a745;
+    }
+
+    .card-recap {
+        border-left: 5px solid #00ffff; /* neon blue */
+    }
+
+    .card-outline {
+        border-left: 5px solid #007bff; /* bright blue for outline */
+    }
+
+    .card-files {
+        border-left: 5px solid #ff9800; /* orange for file upload */
+    }
+
+    .card-quiz {
+        border-left: 5px solid #8e44ad; /* purple for quizzes */
+    }
+</style>

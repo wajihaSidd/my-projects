@@ -1,0 +1,132 @@
+﻿@model IEnumerable<Learning_Management_System.Models.ENTITIES.Attendance>
+
+@{
+    ViewData["Title"] = "Attendance Records";
+    var previousAttendance = Model.ToList();
+    var courseTitle = ViewBag.CourseName as string ?? "Course";
+}
+
+<h2 class="recap-title">Attendance Records for @courseTitle</h2>
+
+
+
+@if (previousAttendance != null && previousAttendance.Count > 0)
+{
+    <div class="recap-table-container">
+        <table class="recap-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Student</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var record in previousAttendance)
+                {
+                    var color = record.Status switch
+                    {
+                        "Present" => "green",
+                        "Late" => "orange",
+                        "Absent" => "red",
+                        _ => "black"
+                    };
+                    <tr>
+                        <td>@record.Date.ToString("yyyy-MM-dd")</td>
+                        <td>@record.Student.Name</td>
+                        <td style="color:@color; font-weight:bold;">@record.Status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-info recap-alert">
+        <i class="fas fa-info-circle"></i> No attendance records found for this course.
+    </div>
+}
+
+<div class="mt-3">
+    <a href="@Url.Action("SelectCourse", "Attendance")" class="btn back-btn">
+        ← Back to Courses
+    </a>
+</div>
+<style>
+    /* Recap-style title */
+    .recap-title {
+        background-color: royalblue;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        display: inline-block;
+    }
+
+    /* Table container like recap */
+    .recap-table-container {
+        overflow-x: auto;
+    }
+
+    .recap-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+
+        .recap-table th, .recap-table td {
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        .recap-table thead th {
+            background-color: royalblue;
+            color: white;
+            font-weight: 600;
+        }
+
+        .recap-table tbody tr {
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+            .recap-table tbody tr:nth-child(even) {
+                background-color: #e9f1ff;
+            }
+
+            .recap-table tbody tr:hover {
+                background-color: #d0e4ff;
+                transform: scale(1.01);
+            }
+
+    /* Alerts */
+    .recap-alert {
+        border-radius: 8px;
+        padding: 12px 15px;
+        margin-bottom: 15px;
+    }
+
+    /* Back button styled like recap */
+    .back-btn {
+        display: inline-block;
+        margin-bottom: 10px;
+        padding: 10px 20px;
+        background-color: #6c757d;
+        color: white;
+        border-radius: 6px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background-color 0.2s ease;
+    }
+
+        .back-btn:hover {
+            background-color: #5a6268;
+        }
+</style>

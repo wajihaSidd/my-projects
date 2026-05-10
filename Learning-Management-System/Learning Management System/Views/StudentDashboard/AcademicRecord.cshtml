@@ -1,0 +1,464 @@
+﻿@model IEnumerable<Learning_Management_System.Models.ENTITIES.AcademicRecord>
+@{
+    ViewData["Title"] = "Academic Records";
+    var studentName = Context.Session.GetString("StudentName") ?? "Student";
+}
+
+<div class="container mt-4">
+
+    <!-- Welcome Alert -->
+    <div class="welcome-box text-center p-4 mb-4 shadow-sm rounded-4">
+        <h1 style="color:white">Welcome, @studentName!</h1>
+        <p>Select an option from the "Courses" menu to view your current semester courses or available courses.</p>
+    </div>
+    <!-- Picture and All Three Boxes Row -->
+    <div class="d-flex flex-wrap align-items-start gap-4 mb-4">
+        <!-- Picture Section -->
+        <div class="picture-section">
+            <form asp-action="UploadPicture" method="post" enctype="multipart/form-data">
+                <div class="profile-picture-container">
+                    <img src="@(ViewBag.ProfilePicture != null && ViewBag.ProfilePicture.Length > 0 ? $"data:image/png;base64,{Convert.ToBase64String(ViewBag.ProfilePicture)}" : "/images/default-profile.png")"
+                         alt="Profile Picture"
+                         class="profile-picture" />
+
+                    <div class="upload-overlay">
+                        <span>Click to Choose File</span>
+                        <input type="file" name="picture" class="file-input" />
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success mt-3 upload-btn">Upload / Save Picture</button>
+            </form>
+        </div>
+
+        <!-- All Three Boxes in a Column -->
+        <div class="d-flex flex-column gap-3" style="flex: 1; min-width: 300px;">
+            <!-- Personal Information and Academic Record in One Row -->
+            <div class="d-flex gap-3 mb-3">
+                <!-- Personal Information Box -->
+                <a href="@Url.Action("Index", "StudentDashboard")" class="info-box" style="flex: 1;">
+                    <div class="box-title">Personal Information</div>
+                    <div class="box-content">
+                        @if (ViewBag.StudentDetails != null)
+                        {
+                            @($"{ViewBag.StudentDetails.FirstName} {ViewBag.StudentDetails.LastName}")
+                        }
+                        else
+                        {
+                            <text>Not Added</text>
+                        }
+                    </div>
+                </a>
+
+                <!-- Academic Record Box -->
+                <a href="@Url.Action("AcademicRecord", "StudentDashboard")" class="info-box" style="flex: 1;">
+                    <div class="box-title">Academic Record</div>
+                    <div class="box-content">View Academic Record</div>
+                </a>
+            </div>
+
+            <!-- Student Summary Box -->
+            <div class="info-box summary-box" style="cursor: default;">
+                <div class="box-title">Student Information</div>
+                <div class="box-content text-start">
+                    <table class="summary-table">
+                        <tbody>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Registration Number</th>
+                                <th>Email</th>
+                            </tr>
+                            <tr class="light-row">
+                                <td>@studentName</td>
+                                <td>@(ViewBag.StudentDetails?.RegistrationNumber ?? "N/A")</td>
+                                <td>@(ViewBag.StudentDetails?.Email ?? "N/A")</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Title -->
+    <div class="welcome-box text-center p-4 mb-4 shadow-sm rounded-4">
+        <h2 style="color:white">🎓 Academic Records</h2>
+        <p>View, edit or add your academic records below.</p>
+    </div>
+
+    <!-- Alerts -->
+    @if (TempData["AcademicSuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["AcademicSuccessMessage"]</div>
+    }
+    @if (TempData["AcademicErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["AcademicErrorMessage"]</div>
+    }
+    @if (Model.Any())
+    {
+        @foreach (var record in Model)
+        {
+            <div class="detail-box mb-4">
+                <h4 class="box-heading">Academic Record: @(string.IsNullOrEmpty(record.EducationLevel) ? "—" : record.EducationLevel)</h4>
+                <table class="detail-table">
+                    <tbody>
+                        <tr><th>Education Level</th><td>@(string.IsNullOrEmpty(record.EducationLevel) ? "—" : record.EducationLevel)</td></tr>
+                        <tr><th>Institution</th><td>@(string.IsNullOrEmpty(record.Institution) ? "—" : record.Institution)</td></tr>
+                        <tr><th>Board/University</th><td>@(string.IsNullOrEmpty(record.BoardOrUniversity) ? "—" : record.BoardOrUniversity)</td></tr>
+                        <tr><th>Major Subjects</th><td>@(string.IsNullOrEmpty(record.MajorSubjects) ? "—" : record.MajorSubjects)</td></tr>
+                        <tr><th>Specialization</th><td>@(string.IsNullOrEmpty(record.Specialization) ? "—" : record.Specialization)</td></tr>
+                        <tr><th>Duration</th><td>@(record.StartDate?.ToString("yyyy") ?? "—") - @(record.EndDate?.ToString("yyyy") ?? "—")</td></tr>
+                        <tr><th>Division/Grade</th><td>@(string.IsNullOrEmpty(record.DivisionOrGrade) ? "—" : record.DivisionOrGrade)</td></tr>
+                        <tr><th>Percentage</th><td>@(record.Percentage.HasValue? record.Percentage + " %" : "—")</td></tr>
+                        @* <tr><th>CGPA</th><td>@decimal.IsNullOrEmpty(record.CGPA) ? "—" : record.CGPA)</td></tr> *@
+                        <tr><th>Study Mode</th><td>@(string.IsNullOrEmpty(record.StudyMode) ? "—" : record.StudyMode)</td></tr>
+                        <tr><th>Location</th><td>@(string.IsNullOrEmpty(record.Location) ? "—" : record.Location)</td></tr>
+                    </tbody>
+                </table>
+                <div class="text-end mt-3">
+                    <a asp-action="EditAcademicRecord" asp-route-id="@record.AcademicRecordId" class="btn btn-warning btn-sm">Edit</a>
+                </div>
+            </div>
+        }
+
+        <div class="mt-3">
+            <a asp-action="EditAcademicRecord" class="btn btn-primary">Add New Academic Record</a>
+            <a asp-action="Index" class="btn btn-secondary ms-2">Back to Dashboard</a>
+        </div>
+    }
+    else
+    {
+        <p>No academic records found. Click "Add New Record" to insert your last/current education.</p>
+        <a asp-action="EditAcademicRecord" class="btn btn-primary mt-2">Add New Academic Record</a>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Back to Dashboard</a>
+    }
+</div>
+
+<style>
+    /* Welcome Box */
+    .welcome-box {
+        background: linear-gradient(135deg, #4169E1, #5A7FFF);
+        color: white;
+        border-radius: 15px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        transition: transform 0.2s;
+    }
+
+        .welcome-box:hover {
+            transform: translateY(-3px);
+        }
+
+    /* Picture Section */
+    .picture-section {
+        flex-shrink: 0;
+    }
+
+    /* Picture Box */
+    .profile-picture-container {
+        width: 250px;
+        height: 250px;
+        padding: 10px;
+        border-radius: 12px;
+        border: 2px solid #ddd;
+        background: #fafafa;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        transition: 0.3s ease-in-out;
+    }
+
+    .profile-picture {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 8px;
+        background: white;
+    }
+
+    .upload-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+        background: rgba(0,0,0,0.45);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.35s;
+        font-weight: bold;
+        font-size: 15px;
+    }
+
+    .profile-picture-container:hover .upload-overlay {
+        opacity: 1;
+        cursor: pointer;
+    }
+
+    .file-input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+    }
+
+    .upload-btn {
+        width: 250px;
+        font-weight: bold;
+        border-radius: 8px;
+    }
+
+    /* Info Box Buttons */
+    .info-box {
+        background-color: #4169E1;
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        min-height: 120px;
+    }
+
+        .info-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+            text-decoration: none;
+            color: white;
+        }
+
+    .summary-box:hover {
+        transform: none !important;
+        cursor: default !important;
+    }
+
+    .box-title {
+        font-weight: 600;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .box-content {
+        font-size: 16px;
+    }
+
+    /* Student Summary Table */
+    .summary-table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    }
+
+        .summary-table th, .summary-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .summary-table th {
+            background-color: #4169E1;
+            color: white;
+            font-weight: 600;
+        }
+
+        .summary-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Light blue row with black text */
+        .summary-table tr.light-row {
+            background-color: #e7efff;
+            color: black;
+        }
+
+    /* Detail Boxes - Updated for Academic Records */
+    .detail-box {
+        flex: 1;
+        min-width: 250px;
+        background-color: #f0f4ff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+        margin-bottom: 20px;
+    }
+
+        .detail-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        }
+
+    .box-heading {
+        background-color: #4169E1;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+
+    .detail-table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    }
+
+        .detail-table th, .detail-table td {
+            text-align: left;
+            padding: 10px 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .detail-table th {
+            width: 180px;
+            font-weight: 600;
+            background-color: #4169E1;
+            color: white;
+            padding: 12px 15px;
+        }
+
+        .detail-table tbody tr {
+            background-color: #e7efff;
+            transition: background-color 0.3s ease;
+        }
+
+            .detail-table tbody tr:nth-child(even) {
+                background-color: #d6e4ff;
+            }
+
+            .detail-table tbody tr:hover {
+                background-color: #c5d8ff;
+            }
+
+        .detail-table tr:last-child td {
+            border-bottom: none;
+        }
+
+    /* Buttons */
+    .btn-primary {
+        background-color: #4169E1;
+        border-color: #4169E1;
+        color: white;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 600;
+        transition: transform 0.2s;
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background-color: #3654b8;
+            border-color: #3654b8;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: white;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 600;
+        transition: transform 0.2s;
+    }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            background-color: #565e64;
+            border-color: #565e64;
+        }
+
+    .btn-warning {
+        background-color: #ffb400;
+        border-color: #ffb400;
+        color: white;
+        border-radius: 8px;
+        padding: 6px 12px;
+        font-weight: 600;
+        transition: transform 0.2s;
+    }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            background-color: #e0a500;
+            border-color: #e0a500;
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .d-flex.flex-wrap {
+            flex-direction: column;
+        }
+
+        .picture-section {
+            align-self: center;
+        }
+
+        .d-flex.flex-column {
+            align-items: center;
+        }
+
+        .d-flex.gap-3.mb-3 {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .info-box {
+            width: 100%;
+        }
+
+        .detail-table th, .detail-table td {
+            display: block;
+            width: 100%;
+        }
+
+        .detail-table th {
+            width: 100%;
+        }
+
+        .detail-table tr {
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .detail-table td {
+            text-align: right;
+            padding-left: 50%;
+            position: relative;
+        }
+
+            .detail-table td:before {
+                content: attr(data-label);
+                position: absolute;
+                left: 15px;
+                font-weight: 600;
+                text-align: left;
+            }
+    }
+</style>
+
+<script>
+    function previewFile(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.querySelector('.profile-picture-container img').src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>

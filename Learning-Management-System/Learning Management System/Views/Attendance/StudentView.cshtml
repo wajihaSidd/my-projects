@@ -1,0 +1,170 @@
+﻿@model IEnumerable<Learning_Management_System.Models.ENTITIES.Attendance>
+
+@{
+    ViewData["Title"] = "Student Attendance";
+    var studentName = ViewBag.StudentName ?? "Student";
+    var courseTitle = ViewBag.CourseTitle ?? "Course";
+    var totalPresent = ViewBag.TotalPresent ?? 0;
+    var totalLate = ViewBag.TotalLate ?? 0;
+    var totalAbsent = ViewBag.TotalAbsent ?? 0;
+}
+
+<h2 class="recap-title">Attendance for @courseTitle</h2>
+
+<!-- Summary Cards (untouched size) -->
+<div class="summary-cards">
+    <div class="card present-card">
+        Present: @totalPresent
+    </div>
+    <div class="card late-card">
+        Late: @totalLate
+    </div>
+    <div class="card absent-card">
+        Absent: @totalAbsent
+    </div>
+</div>
+
+<!-- Attendance Table -->
+<div class="recap-table-container">
+    <table class="recap-table">
+        <thead>
+            <tr>
+                <th>Course</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Remarks</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="4" style="text-align:center; padding:20px;">No attendance records found for this course.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var a in Model)
+                {
+                    var color = a.Status switch
+                    {
+                        "Present" => "green",
+                        "Late" => "orange",
+                        "Absent" => "red",
+                        _ => "black"
+                    };
+                    <tr>
+                        <td>@a.Course?.Title</td>
+                        <td>@a.Date.ToString("yyyy-MM-dd")</td>
+                        <td style="color:@color; font-weight:bold;">@a.Status</td>
+                        <td>@a.Remarks</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<a href="@Url.Action("CurrentSemester", "StudentDashboard")" class="btn back-btn">
+    Back to Courses
+</a>
+
+<style>
+    /* Recap-style title */
+    .recap-title {
+        background-color: royalblue;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        display: inline-block;
+    }
+
+    /* Summary Cards (unchanged size) */
+    .summary-cards {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+        .summary-cards .card {
+            padding: 10px 15px; /* unchanged */
+            color: white;
+            border-radius: 5px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 100px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+    .present-card {
+        background-color: #28a745;
+    }
+
+    .late-card {
+        background-color: #ffc107;
+        color: #000;
+    }
+
+    .absent-card {
+        background-color: #dc3545;
+    }
+
+    /* Table container like recap */
+    .recap-table-container {
+        overflow-x: auto;
+    }
+
+    .recap-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+
+        .recap-table th, .recap-table td {
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        .recap-table thead {
+            background-color: royalblue;
+            color: white;
+            font-weight: 600;
+        }
+
+        .recap-table tbody tr {
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+            .recap-table tbody tr:nth-child(even) {
+                background-color: #e9f1ff;
+            }
+
+            .recap-table tbody tr:hover {
+                background-color: #d0e4ff;
+                transform: scale(1.01);
+            }
+
+    /* Back button styled like recap */
+    .back-btn {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #6c757d;
+        color: white;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.2s ease;
+    }
+
+        .back-btn:hover {
+            background-color: #5a6268;
+        }
+</style>

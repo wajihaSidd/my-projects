@@ -1,0 +1,102 @@
+﻿@model Learning_Management_System.Models.ENTITIES.CourseOutline
+@{
+    ViewData["Title"] = "Add Week";
+}
+
+<div class="container mt-4">
+    <div class="card recap-card">
+        <div class="card-header recap-header">
+            <h4 class="mb-0">
+                <i class="fas fa-plus"></i> + Add Course Outline Week
+            </h4>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+
+                <!-- CourseId MUST be posted -->
+                <input type="hidden" asp-for="CourseId" />
+
+                <div class="mb-3">
+                    <label asp-for="WeekNumber" class="form-label"></label>
+                    <input asp-for="WeekNumber" class="form-control" />
+                    <span asp-validation-for="WeekNumber" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="WeeklyPlan" class="form-label"></label>
+                    <input asp-for="WeeklyPlan" class="form-control" />
+                    <span asp-validation-for="WeeklyPlan" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Topic" class="form-label"></label>
+                    <input asp-for="Topic" class="form-control" />
+                    <span asp-validation-for="Topic" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label"></label>
+                    <textarea asp-for="Description" class="form-control"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn-save">Save</button>
+                <a asp-action="Index" asp-route-courseId="@Model.CourseId" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Card */
+    .recap-card {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    /* Header */
+    .recap-header {
+        background-color: royalblue;
+        color: white;
+        padding: 12px 20px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    /* Form Inputs */
+    .form-control {
+        border-radius: 6px;
+        padding: 8px 12px;
+    }
+
+    /* Save button styling */
+    .btn-save {
+        background-color: #0d6efd; 
+        color: white;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 8px;
+        border: none;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+        .btn-save:hover {
+            background-color: #4169e1;
+            
+            transform: scale(1.05);
+            cursor: pointer;
+        }
+
+    /* Cancel button */
+    .btn-secondary {
+        padding: 10px 20px;
+        border-radius: 8px;
+        margin-left: 10px;
+    }
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

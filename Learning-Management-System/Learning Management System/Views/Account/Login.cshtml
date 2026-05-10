@@ -1,0 +1,145 @@
+﻿@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          background-color: #2f4d75;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background: #fff;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            width: 360px;
+            text-align: center;
+        }
+
+            .login-container h1 {
+                margin-bottom: 15px;
+                color: #2c3e50;
+                font-size: 28px;
+                font-weight: bold;
+            }
+
+            .login-container h2 {
+                margin-bottom: 25px;
+                color: #7f8c8d;
+                font-size: 20px;
+                font-weight: normal;
+            }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 5px;
+                font-size: 14px;
+                color: #34495e;
+            }
+
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 14px;
+            border: 1px solid #dcdde1;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #40739e;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+            .btn-primary:hover {
+                background-color: #2f4d75;
+            }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            font-size: 13px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <img src="/images/logo.png" alt="Griffin Vault Logo" style="height:300px;">
+
+
+        <form asp-action="Login" method="post" asp-controller="Account">
+            <div class="form-group">
+                <label>Select Role</label>
+                <select name="role" id="roleSelect" class="form-control" required>
+                    <option value="">--Select Role--</option>
+                    <option value="admin">Admin</option>
+                    <option value="student">Student</option>
+                    <option value="faculty">Faculty</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="emailGroup">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" class="form-control" required />
+            </div>
+
+            <button type="submit" class="btn-primary">Login</button>
+
+            <div class="error-message">@ViewBag.Error</div>
+        </form>
+    </div>
+
+    <script>
+        const roleSelect = document.getElementById("roleSelect");
+        const emailGroup = document.getElementById("emailGroup");
+        const emailInput = emailGroup.querySelector("input");
+
+        function updateFields() {
+            const role = roleSelect.value;
+
+            if(role === "admin") {
+                emailGroup.style.display = "none";
+                emailInput.removeAttribute("required");
+            }
+            else {
+                emailGroup.style.display = "block";
+                emailInput.setAttribute("required", "required");
+            }
+        }
+
+        roleSelect.addEventListener("change", updateFields);
+        window.onload = updateFields;
+    </script>
+</body>
+</html>

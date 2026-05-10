@@ -1,0 +1,60 @@
+﻿@model Learning_Management_System.Models.ENTITIES.Certificate
+@{
+    var instructorName = ViewBag.Instructor;
+}
+
+<div style="width: 800px; margin: 50px auto; padding: 50px; border: 10px solid #4A90E2; border-radius: 20px; background: #fdfdfd; text-align: center; font-family: 'Georgia', serif;">
+
+    <!-- Logo -->
+    <div style="margin-bottom: 30px;">
+        <img src="~/images/learning.png" alt="Logo" style="height:80px;" />
+        <h1 style="margin-top:10px; color:#4A90E2;">Certificate of @Model.CertificateType</h1>
+    </div>
+
+    <!-- Student -->
+    <p style="font-size:18px; margin-top:20px;">This is proudly presented to</p>
+    <h2 style="font-size:32px; color:#333; margin:20px 0;">@Model.Student.Name</h2>
+
+    <!-- Course -->
+    <p style="font-size:18px; margin-top:20px;">For successfully completing the course</p>
+    <h2 style="font-size:28px; color:#555; margin:20px 0;">@Model.Course.Title</h2>
+
+    <!-- Issue Date -->
+    <p style="margin-top:30px; font-size:16px; color:#333;">Issued on: @Model.IssueDate.ToLocalTime().ToString("dd MMMM yyyy")</p>
+
+    <!-- Signature Section -->
+    <div style="display:flex; justify-content: space-between; margin-top:80px; padding: 0 50px; align-items:center;">
+
+        <!-- Instructor Signature -->
+        <div style="text-align:center;">
+            <img src="~/images/signature.png" alt="Instructor Signature" style="height:50px; display:block; margin:auto;" />
+            <p style="margin-top:5px;">@instructorName</p>
+        </div>
+
+        <!-- Authorized Signature -->
+        <div style="text-align:center;">
+            <img src="~/images/stamp.png" alt="Authorized Signature" style="height:60px; display:block; margin:auto;" />
+            <p style="margin-top:5px;">Authorized Signature</p>
+        </div>
+    </div>
+
+    <!-- Print Button -->
+    <button onclick="window.print();" style="margin-top:50px; padding:10px 30px; font-size:16px; border:none; background-color:#4A90E2; color:white; border-radius:8px; cursor:pointer;">
+        Print / Save as PDF
+    </button>
+</div>
+
+<style>
+    @@media print {
+        button
+
+    {
+        display: none;
+    }
+    /* Hide button when printing */
+    body {
+        margin: 0;
+    }
+
+    }
+</style>

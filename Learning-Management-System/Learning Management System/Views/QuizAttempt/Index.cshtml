@@ -1,0 +1,86 @@
+﻿@model List<Learning_Management_System.Models.ENTITIES.Quiz>
+@{
+    ViewData["Title"] = "Quizzes";
+    var results = ViewBag.Results as Dictionary<int, int>;
+}
+
+<h2 class="mb-3">Available Quizzes</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<table class="table table-striped table-hover">
+    <thead class="quiz-table-head">
+        <tr>
+            <th>Title</th>
+            <th>Questions</th>
+            <th>Status</th>
+            <th>Marks</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var quiz in Model)
+        {
+            bool attempted = results != null && results.ContainsKey(quiz.QuizId);
+
+            <tr>
+                <td>@quiz.Title</td>
+                <td>@quiz.Questions.Count</td>
+
+                <td>
+                    @if (attempted)
+                    {
+                        <span class="badge bg-success">Attempted</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark">Pending</span>
+                    }
+                </td>
+
+                <td>
+                    @if (attempted)
+                    {
+                        <strong>@results[quiz.QuizId]</strong>
+                    }
+                    else
+                    {
+                        <span class="text-muted">—</span>
+                    }
+                </td>
+
+                <td>
+                    @if (attempted)
+                    {
+                        <button class="btn btn-secondary btn-sm" disabled>Attempted</button>
+                    }
+                    else
+                    {
+                        <a asp-controller="QuizAttempt"
+                           asp-action="Attempt"
+                           asp-route-quizId="@quiz.QuizId"
+                           class="btn btn-primary btn-sm">
+                            Attempt
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    .quiz-table-head {
+        background-color: royalblue;
+        color: white;
+    }
+
+    .quiz-table-head th {
+        color: white !important;
+        text-align: center;
+        vertical-align: middle;
+    }
+</style>

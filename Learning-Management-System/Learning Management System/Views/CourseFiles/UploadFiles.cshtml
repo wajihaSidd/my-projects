@@ -1,0 +1,63 @@
+﻿@model List<Learning_Management_System.Models.ENTITIES.CourseFiles>
+
+@{
+    ViewData["Title"] = "Upload Files for " + ViewBag.CourseTitle;
+}
+
+<h2>Upload Files for @ViewBag.CourseTitle</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<form asp-action="UploadFiles" asp-controller="CourseFiles" enctype="multipart/form-data" method="post">
+    <input type="hidden" name="CourseId" value="@ViewBag.CourseId" />
+
+    <div class="mb-2">
+        <label>Title</label>
+        <input type="text" name="Title" class="form-control" required />
+    </div>
+
+    <div class="mb-2">
+        <label>Description</label>
+        <textarea name="Description" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-2">
+        <label>Week Number</label>
+        <input type="number" name="WeekNumber" class="form-control" min="1" required />
+    </div>
+
+    <div class="mb-2">
+        <label>Category</label>
+        <select name="Category" class="form-control" required>
+            <option value="Material">Material</option>
+            <option value="Assignment">Assignment</option>
+        </select>
+    </div>
+
+    <div class="mb-2">
+        <label>Select File</label>
+        <input type="file" name="File" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">Upload</button>
+</form>
+
+<hr />
+
+<h3>Uploaded Files</h3>
+
+@foreach (var f in Model)
+{
+    <div class="border p-2 mb-1">
+        <strong>@f.Title</strong> (@f.Category) - Week @f.WeekNumber
+        <a href="@f.FilePath" download class="btn btn-sm btn-success">Download</a>
+        <a asp-action="DeleteFile" asp-route-id="@f.CourseFileId" class="btn btn-sm btn-danger">Delete</a>
+    </div>
+}

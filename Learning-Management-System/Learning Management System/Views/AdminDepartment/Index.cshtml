@@ -1,0 +1,84 @@
+﻿@model IEnumerable<Learning_Management_System.Models.ENTITIES.Department>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary fw-bold">Departments</h2>
+        <a asp-controller="AdminDashboard" asp-action="Index" class="btn btn-secondary shadow-sm">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-primary shadow-sm">+ Add Department</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover align-middle text-center">
+            <thead class="table-dark">
+                <tr>
+                   
+                    <th>Name</th>
+                    <th>Faculty Count</th>
+                    <th>Student Count</th>
+                    <th>Course Count</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var d in Model)
+                {
+                    <tr>
+                     
+                        <td>@d.Name</td>
+                        <td>@d.Faculty.Count</td>
+                        <td>@d.Students.Count</td>
+                        <td>@d.Courses.Count</td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@d.DepartmentId" class="btn btn-info btn-sm shadow-sm">Details</a>
+                            <a asp-action="Edit" asp-route-id="@d.DepartmentId" class="btn btn-warning btn-sm shadow-sm">Edit</a>
+                            <form asp-action="Delete" asp-route-id="@d.DepartmentId" method="post" style="display:inline;">
+                                @Html.AntiForgeryToken()
+                                <button class="btn btn-danger btn-sm shadow-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .btn {
+        border-radius: 8px;
+        transition: all 0.2s ease;
+    }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+    .table th, .table td {
+        vertical-align: middle;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 123, 255, 0.1);
+    }
+</style>

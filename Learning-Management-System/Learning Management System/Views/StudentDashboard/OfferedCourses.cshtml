@@ -1,0 +1,182 @@
+﻿@model IEnumerable<Learning_Management_System.Models.ENTITIES.Courses>
+@{
+    var deptName = ViewBag.DepartmentName ?? "Department";
+    var registered = ViewBag.RegisteredCourses as List<Learning_Management_System.Models.ENTITIES.Courses>;
+}
+
+<h2 class="recap-title">Courses Offered in @deptName</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<div class="courses-container">
+
+    <!-- ========================= -->
+    <!-- 📦 REGISTERED COURSES BASKET -->
+    <!-- ========================= -->
+    <div class="course-card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">📦 Registered Courses</h5>
+        </div>
+        <div class="card-body">
+            @if (registered != null && registered.Any())
+            {
+                <ul class="list-group">
+                    @foreach (var rc in registered)
+                    {
+                        <li class="list-group-item">@rc.Title</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted mb-0">No registered courses yet.</p>
+            }
+        </div>
+    </div>
+
+    <!-- ========================= -->
+    <!-- 📚 AVAILABLE COURSES LIST -->
+    <!-- ========================= -->
+    @if (Model != null && Model.Any())
+    {
+        foreach (var course in Model)
+        {
+            var faculty = course.CourseFaculty.FirstOrDefault()?.Faculty;
+            <div class="course-card mb-3">
+                <table class="course-table">
+                    <thead>
+                        <tr>
+                            <th colspan="2">@course.Title</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="faculty-info">
+                            <td><strong>Faculty:</strong> @faculty?.Name</td>
+                            <td><strong>Email:</strong> @faculty?.Email</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="btn-group-wrapper">
+                                    <form asp-action="RegisterCourse" method="post" class="m-0">
+                                        <input type="hidden" name="courseId" value="@course.CourseId" />
+                                        <button type="submit" class="btn btn-success btn-sm">Register</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="alert alert-info">No courses available for registration.</div>
+    }
+</div>
+
+<style>
+    /* Page Title */
+    .recap-title {
+        background-color: royalblue;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        display: inline-block;
+    }
+
+    /* Courses Container */
+    .courses-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    /* Individual Course Card */
+    .course-card {
+        background-color: #f1f8ff;
+        border-radius: 10px;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: transform 0.2s ease;
+        padding: 0;
+    }
+
+        .course-card:hover {
+            transform: translateY(-3px);
+        }
+
+    /* Table inside course card */
+    .course-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+        .course-table th {
+            background-color: royalblue;
+            color: white;
+            padding: 10px 15px;
+            font-weight: 600;
+            text-align: left;
+        }
+
+        .course-table td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #ccc;
+        }
+
+    /* Faculty Info Row - light blue rounded boxes */
+    .faculty-info td {
+        background-color: #d0e4ff; /* light blue like recap cards */
+        border-radius: 8px;
+        padding: 10px 15px;
+        margin: 5px 0;
+    }
+
+        .faculty-info td:first-child {
+            margin-right: 5px;
+        }
+
+    /* Button group inside table */
+    .btn-group-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+        .btn-group-wrapper .btn {
+            min-width: 80px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+    /* Alerts */
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .alert-info {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+    }
+</style>

@@ -1,0 +1,98 @@
+﻿@model Learning_Management_System.Models.Reecap
+
+@{
+    ViewData["Title"] = "Marks Recap";
+}
+
+<h2 class="recap-title">Marks Recap for @Model.CourseStudent.Course.Title</h2>
+
+<div class="recap-table-container">
+    <table class="recap-table">
+        <thead>
+            <tr>
+                <th>Assessment</th>
+                <th>Obtained Marks</th>
+                <th>Total Marks</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Assignment 1</td><td>@Model.Ass1</td><td>@Model.MaxAss1</td></tr>
+            <tr><td>Assignment 2</td><td>@Model.Ass2</td><td>@Model.MaxAss2</td></tr>
+            <tr><td>Quiz 1</td><td>@Model.Quiz1</td><td>@Model.MaxQuiz1</td></tr>
+            <tr><td>Quiz 2</td><td>@Model.Quiz2</td><td>@Model.MaxQuiz2</td></tr>
+            <tr><td>Mid Term</td><td>@Model.Mid</td><td>@Model.MaxMid</td></tr>
+            <tr><td>Final Exam</td><td>@Model.Final</td><td>@Model.MaxFinal</td></tr>
+        </tbody>
+    </table>
+
+    <div class="recap-summary">
+        <h4>Total Obtained: <span>@Model.TotalMarks</span></h4>
+        <h5>Total Maximum Marks: <span>@Model.TotalMaxMarks</span></h5>
+    </div>
+</div>
+
+<a asp-action="CurrentSemester" asp-controller="StudentDashboard" class="btn btn-secondary mt-3">Back to Courses</a>
+
+<style>
+    .recap-title {
+        background-color: royalblue;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        display: inline-block;
+    }
+
+    .recap-table-container {
+        overflow-x: auto;
+    }
+
+    .recap-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+        .recap-table th, .recap-table td {
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        .recap-table thead th {
+            background-color: royalblue;
+            color: white;
+            font-weight: 600;
+        }
+
+        .recap-table tbody tr {
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease;
+        }
+
+            .recap-table tbody tr:nth-child(even) {
+                background-color: #e9f1ff;
+            }
+
+            .recap-table tbody tr:hover {
+                background-color: #d0e4ff;
+            }
+
+    .recap-summary {
+        margin-top: 15px;
+        font-size: 1.1rem;
+    }
+
+        .recap-summary h4, .recap-summary h5 {
+            margin: 5px 0;
+        }
+
+        .recap-summary span {
+            font-weight: 600;
+            color: royalblue;
+        }
+</style>

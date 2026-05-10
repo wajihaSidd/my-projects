@@ -1,0 +1,171 @@
+﻿@model List<Learning_Management_System.Models.ENTITIES.CourseFiles>
+
+@{
+    ViewData["Title"] = "Course Files";
+}
+
+
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning">No files available for this course yet.</div>
+}
+else
+{
+    <!-- Course Materials Table -->
+    <h4>📘 Course Materials</h4>
+    @if (Model.Any(x => x.Category == Learning_Management_System.Models.ENTITIES.CourseFileCategory.Material))
+    {
+        <table class="recap-table">
+            <thead>
+                <tr>
+                    <th>Week</th>
+                    <th>Title</th>
+                    <th>File Name</th>
+                    <th>Download</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var f in Model.Where(x => x.Category == Learning_Management_System.Models.ENTITIES.CourseFileCategory.Material).OrderBy(x => x.WeekNumber))
+                {
+                    <tr>
+                        <td>@f.WeekNumber</td>
+                        <td>@f.Title</td>
+                        <td>@f.FileName</td>
+                        <td>
+                            <a href="@f.FilePath" download class="btn btn-sm btn-theme">Download</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info">No course materials uploaded yet.</div>
+    }
+
+    <!-- Assignments Table -->
+    <h4 class="mt-4">📝 Assignments</h4>
+    @if (Model.Any(x => x.Category == Learning_Management_System.Models.ENTITIES.CourseFileCategory.Assignment))
+    {
+        <table class="recap-table">
+            <thead>
+                <tr>
+                    <th>Week</th>
+                    <th>Title</th>
+                    <th>File Name</th>
+                    <th>Download</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var f in Model.Where(x => x.Category == Learning_Management_System.Models.ENTITIES.CourseFileCategory.Assignment).OrderBy(x => x.WeekNumber))
+                {
+                    <tr>
+                        <td>@f.WeekNumber</td>
+                        <td>@f.Title</td>
+                        <td>@f.FileName</td>
+                        <td>
+                            <a href="@f.FilePath" download class="btn btn-sm btn-theme">Download</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info">No assignments uploaded yet.</div>
+        <a asp-controller="StudentDashboard" asp-action="CurrentSemester" class="btn btn-themee mt-3">Back to Courses</a>
+    }
+}
+
+<a asp-controller="StudentDashboard" asp-action="CurrentSemester" class="btn btn-themee mt-3">Back to Courses</a>
+
+<style>
+    /* Title */
+    .recap-title {
+        background-color: #1E3A8A;
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        display: inline-block;
+    }
+
+    /* Table */
+    .recap-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        box-shadow: 0 4px 12px rgba(30,58,138,0.2);
+        border-radius: 10px;
+        overflow: hidden;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin-bottom: 20px;
+    }
+
+        .recap-table th, .recap-table td {
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        .recap-table thead th {
+            background-color: #3B82F6;
+            color: white;
+            font-weight: 600;
+        }
+
+        .recap-table tbody tr {
+            background-color: #E0F2FE;
+            transition: background-color 0.3s ease;
+        }
+
+            .recap-table tbody tr:nth-child(even) {
+                background-color: #BAE6FD;
+            }
+
+            .recap-table tbody tr:hover {
+                background-color: #d0e4ff;
+                color: black;
+            }
+
+    /* Download Button & Back Button */
+    .btn-theme {
+        background-color: dodgerblue;
+        color: white;
+        border-radius: 5px;
+        padding: 6px 12px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background-color 0.2s ease;
+    }
+
+    .btn-themee{
+        background-color: grey;
+        color: white;
+        border-radius: 5px;
+        padding: 6px 12px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background-color 0.2s ease;
+
+
+    }
+
+        .btn-theme:hover {
+            background-color: #d0e4ff;
+            color: black;
+        }
+
+    {
+        .recap-table th, .recap-table td
+
+    {
+        font-size: 0.9rem;
+        padding: 8px 10px;
+    }
+
+    }
+</style>

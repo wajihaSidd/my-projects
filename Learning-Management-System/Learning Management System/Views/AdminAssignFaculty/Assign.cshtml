@@ -1,0 +1,160 @@
+﻿@model List<Learning_Management_System.Models.ENTITIES.CourseFaculty>
+@{
+    ViewData["Title"] = "Assign Courses to Faculty";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary fw-bold">@ViewData["Title"]</h2>
+        <a asp-controller="AdminDashboard" asp-action="Index" class="btn btn-secondary shadow-sm">
+            ← Back
+        </a>
+    </div>
+
+    <!-- TempData messages -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Assign Courses Form -->
+    <div class="card shadow-sm mb-5 border-0">
+        <div class="card-header bg-primary text-white fw-bold">
+            Assign Courses to Faculty
+        </div>
+        <div class="card-body">
+            <form asp-action="Assign" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Select Faculty</label>
+                    <select name="facultyId" class="form-select form-select-lg" required>
+                        <option value="">-- Select Faculty --</option>
+                        @foreach (var faculty in ViewBag.Faculties)
+                        {
+                            <option value="@faculty.FacultyId">@faculty.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Select Courses</label>
+                    <div class="row">
+                        @foreach (var course in ViewBag.Courses)
+                        {
+                            <div class="col-md-6 mb-2">
+                                <div class="form-check form-switch">
+                                    <input type="checkbox" name="courseIds" value="@course.CourseId" class="form-check-input" id="course_@course.CourseId" />
+                                    <label class="form-check-label fw-semibold" for="course_@course.CourseId">@course.Title</label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success btn-lg shadow-sm rounded-pill">
+                    Assign Courses
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Existing Assignments Table -->
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-dark text-white fw-bold">
+            Existing Assignments
+        </div>
+        <div class="card-body table-responsive">
+            <table class="table table-hover table-bordered align-middle text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Faculty</th>
+                        <th>Course</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var assignment in Model)
+                    {
+                        <tr>
+                            <td>@assignment.Faculty.Name</td>
+                            <td>@assignment.Course.Title</td>
+                            <td>
+                                <form asp-action="DeleteAssignment" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="facultyId" value="@assignment.FacultyId" />
+                                    <input type="hidden" name="courseId" value="@assignment.CourseId" />
+                                    <button type="submit" class="btn btn-sm btn-danger shadow-sm rounded-pill" onclick="return confirm('Are you sure to delete this assignment?');">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    h2 {
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+
+    .form-check-input {
+        transform: scale(1.4);
+        margin-right: 0.5rem;
+        cursor: pointer;
+    }
+
+    .form-check-label {
+        cursor: pointer;
+    }
+
+    .card {
+        border-radius: 12px;
+    }
+
+    .card-header {
+        font-size: 1.1rem;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+    }
+
+    .btn {
+        border-radius: 25px;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 123, 255, 0.1);
+    }
+
+    @@media (max-width: 767px) {
+        .form-check-label
+
+    {
+        font-size: 0.9rem;
+    }
+
+    }
+</style>

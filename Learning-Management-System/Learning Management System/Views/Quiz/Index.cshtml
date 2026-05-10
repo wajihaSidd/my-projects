@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Learning_Management_System.Models.ENTITIES.Quiz>
+
+@{
+    ViewData["Title"] = "Quizzes";
+    var courseId = ViewBag.CourseId;
+}
+
+<h2>Quizzes for this Course</h2>
+
+<a style="background-color:royalblue" class="btn btn-primary mb-3" href="@Url.Action("Create", "Quiz", new { courseId })">+ Create New Quiz</a>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">No quizzes available for this course yet.</div>
+}
+else
+{
+    <table class="table table-striped table-bordered" style="background-color: royalblue; color: white;">
+        <thead style="background-color: royalblue; color: white;">
+            <tr>
+                <th>Title</th>
+                <th>Questions Count</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var quiz in Model)
+            {
+                <tr style="background-color: white; color: black;">
+                    <td>@quiz.Title</td>
+                    <td>@(quiz.Questions?.Count ?? 0)</td>
+                    <td>
+                        <a class="btn btn-success btn-sm" href="@Url.Action("AddQuestion", "Quiz", new { quizId = quiz.QuizId })">Add/View Questions</a>
+                        <a class="btn btn-info btn-sm" href="@Url.Action("ViewResults", "Quiz", new { quizId = quiz.QuizId })">View Results</a>
+                        <a class="btn btn-danger btn-sm" href="@Url.Action("Delete", "Quiz", new { id = quiz.QuizId })" onclick="return confirm('Are you sure you want to delete this quiz?');">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

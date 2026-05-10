@@ -1,0 +1,116 @@
+﻿@model List<Learning_Management_System.Models.ViewModels.DepartmentCoursesViewModel>
+
+@{
+    ViewBag.Title = "Enrollments";
+}
+
+<style>
+    .table {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+        .table thead th {
+            background: #0d6efd !important;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+    .btn-custom-back {
+        background-color: #6c757d;
+        color: #fff;
+        border-radius: 8px;
+        padding: 6px 14px;
+        transition: 0.3s;
+        margin-bottom: 15px;
+        float: right;
+    }
+
+        .btn-custom-back:hover {
+            background-color: #5a6268;
+            color: #fff;
+        }
+
+    .course-item {
+        padding: 6px 10px;
+        border-bottom: 1px solid #e0e0e0;
+        border-radius: 4px;
+        background: #f8f9fa;
+        margin-bottom: 4px;
+    }
+
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="container mt-5">
+
+    <div class="header-container">
+        <h2 class="text-primary fw-bold">Enrollments</h2>
+        <a asp-controller="AdminDashboard" asp-action="Index" class="btn btn-custom-back">Back</a>
+    </div>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            @TempData["Message"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Department</th>
+                    <th>Courses Offered</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var dept in Model)
+                {
+                    <tr>
+                        <td>@dept.Department.Name</td>
+                        <td>
+                            @if (dept.Courses != null && dept.Courses.Any())
+                            {
+                                <div>
+                                    @foreach (var courseInfo in dept.Courses)
+                                    {
+                                        <div class="course-item">@courseInfo.Course.Title </div>
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <span class="text-muted fst-italic">No courses assigned</span>
+                            }
+                        </td>
+                      <td>
+   
+
+    <form asp-action="EnrollAllStudents" method="post" style="display:inline;">
+        <input type="hidden" name="departmentId" value="@dept.Department.DepartmentId" />
+        <button class="btn btn-sm btn-success mb-1">Enroll All</button>
+    </form>
+
+    <a asp-action="DeleteStudents"
+       asp-route-departmentId="@dept.Department.DepartmentId"
+       class="btn btn-sm btn-danger mb-1">
+        Deregister students
+    </a>
+</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>

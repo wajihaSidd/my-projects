@@ -1,0 +1,133 @@
+﻿@model List<Learning_Management_System.Models.Reecap>
+
+@{
+    ViewData["Title"] = "Assign / Edit Marks";
+}
+
+<h2 class="recap-title">Students Marks Recap</h2>
+
+
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-warning">No students found for this course.</div>
+}
+else
+{
+    <div class="recap-table-container">
+        <table class="recap-table">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Ass1</th>
+                    <th>Ass2</th>
+                    <th>Quiz1</th>
+                    <th>Quiz2</th>
+                    <th>Mid</th>
+                    <th>Final</th>
+                    <th>Total Obtained</th>
+                    <th>Total Marks</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var recap in Model)
+                {
+                    <tr>
+                        <td>@recap.CourseStudent.Student.Name</td>
+                        <td>@recap.Ass1</td>
+                        <td>@recap.Ass2</td>
+                        <td>@recap.Quiz1</td>
+                        <td>@recap.Quiz2</td>
+                        <td>@recap.Mid</td>
+                        <td>@recap.Final</td>
+                        <td>@recap.TotalMarks</td>
+                        <td>@recap.TotalMaxMarks</td>
+                        <td>
+                            <a asp-action="EditMarks"
+                               asp-route-recapId="@recap.ReecapId"
+                               class="btn btn-sm btn-primary">
+                                Edit
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Back to Courses button below table -->
+
+    <div class="mt-3">
+        <a asp-controller="FacultyDashboard"
+           asp-action="Index"
+           class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+    @* <a asp-action="CurrentSemester" asp-controller="StudentDashboard" class="btn btn-secondary mt-3">Back to Courses</a> *@
+}
+
+<style>
+    .recap-title {
+        background-color: royalblue;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        display: inline-block;
+    }
+
+    .recap-table-container {
+        overflow-x: auto;
+    }
+
+    .recap-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+        .recap-table th, .recap-table td {
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        .recap-table thead th {
+            background-color: royalblue;
+            color: white;
+            font-weight: 600;
+        }
+
+        .recap-table tbody tr {
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease;
+        }
+
+            .recap-table tbody tr:nth-child(even) {
+                background-color: #e9f1ff;
+            }
+
+            .recap-table tbody tr:hover {
+                background-color: #d0e4ff;
+            }
+
+    .btn-sm {
+        border-radius: 6px;
+    }
+
+    .btn-secondary.mt-3 {
+        display: inline-block;
+        margin-top: 15px;
+    }
+</style>

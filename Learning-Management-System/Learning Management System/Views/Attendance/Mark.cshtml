@@ -1,0 +1,218 @@
+﻿@model List<Learning_Management_System.Models.ENTITIES.Students>
+
+@{
+    ViewBag.Title = "Mark Attendance";
+    var previousAttendance = ViewBag.PreviousAttendance as List<Learning_Management_System.Models.ENTITIES.Attendance>;
+    var courseTitle = ViewBag.CourseTitle as string ?? "Course";
+}
+
+<h2 class="recap-title">Mark Attendance for @courseTitle</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success recap-alert alert-dismissible fade show">
+        @TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (previousAttendance != null && previousAttendance.Count > 0)
+{
+    <div class="recap-table-container">
+        <table class="recap-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Student</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var record in previousAttendance)
+                {
+                    var color = record.Status switch
+                    {
+                        "Present" => "green",
+                        "Late" => "orange",
+                        "Absent" => "red",
+                        _ => "black"
+                    };
+                    <tr>
+                        <td>@record.Date.ToString("yyyy-MM-dd")</td>
+                        <td>@record.Student.Name</td>
+                        <td style="color:@color; font-weight:bold;">@record.Status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<div class="card recap-card">
+    <div class="card-header recap-header">
+        <h5 class="mb-0">Mark Today's Attendance (@DateTime.Now.ToString("dd-MMM-yyyy"))</h5>
+    </div>
+    <div class="card-body">
+        <form asp-controller="Attendance" asp-action="SubmitAttendance" method="post">
+            <input type="hidden" name="CourseId" value="@ViewBag.CourseId" />
+            <input type="hidden" name="FacultyId" value="@ViewBag.FacultyId" />
+            <input type="hidden" name="Date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+
+            <div class="recap-table-container">
+                <table class="recap-table">
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Name</th>
+                            <th>Roll Number</th>
+                            <th>Email</th>
+                            <th>Attendance Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var student in Model)
+                        {
+                            <tr>
+                                <td>@student.StudentId</td>
+                                <td>@student.Name</td>
+                                <td>@student.RollNumber</td>
+                                <td>@student.Email</td>
+                                <td>
+                                    <select name="Statuses[@student.StudentId]" class="form-control form-select-sm">
+                                        <option value="Present">✅ Present</option>
+                                        <option value="Absent">❌ Absent</option>
+                                        <option value="Late">⚠️ Late</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-4 ">
+                <a href="@Url.Action("SelectCourse", "Attendance")" class="btn back-btn">
+                    ← Back to Courses
+                </a>
+                <button type="submit" class="btn btn-success">
+                    Submit Attendance
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Card styling */
+    .recap-card {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+
+    /* Header */
+    .recap-header {
+        background-color: royalblue;
+        color: white;
+        padding: 12px 20px;
+        font-weight: 600;
+        border-radius: 10px 10px 0 0;
+    }
+
+    /* Recap-style title */
+    .recap-title {
+        background-color: royalblue;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        display: inline-block;
+    }
+
+    /* Table container */
+    .recap-table-container {
+        overflow-x: auto;
+        margin-bottom: 20px;
+    }
+
+    .recap-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+        .recap-table th, .recap-table td {
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        .recap-table thead th {
+            background-color: royalblue;
+            color: white;
+            font-weight: 600;
+        }
+
+        .recap-table tbody tr {
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+            .recap-table tbody tr:nth-child(even) {
+                background-color: #e9f1ff;
+            }
+
+            .recap-table tbody tr:hover {
+                background-color: #d0e4ff;
+                transform: scale(1.01);
+            }
+
+    /* Back button */
+    .back-btn {
+        padding: 10px 20px;
+        background-color: #6c757d;
+        color: white;
+        border-radius: 6px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        margin-right: 10px;
+        transition: background-color 0.2s ease;
+    }
+
+        .back-btn:hover {
+            background-color: #5a6268;
+        }
+
+    /* Success button */
+    .btn-success {
+        padding: 10px 20px;
+        font-weight: 600;
+        border-radius: 6px;
+        background-color: #28a745;
+        border: none;
+        color: white;
+        transition: background-color 0.2s ease;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+    /* Select dropdown */
+    .form-select-sm {
+        padding: 4px 8px;
+        font-size: 0.875em;
+    }
+
+    /* Alerts */
+    .recap-alert {
+        border-radius: 8px;
+        padding: 12px 15px;
+        margin-bottom: 15px;
+    }
+</style>

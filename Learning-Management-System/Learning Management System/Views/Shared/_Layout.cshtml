@@ -1,0 +1,129 @@
+﻿
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    var role = HttpContextAccessor.HttpContext.Session.GetString("Role");
+    var userName = HttpContextAccessor.HttpContext.Session.GetString("StudentName")
+                   ?? HttpContextAccessor.HttpContext.Session.GetString("FacultyName")
+                   ?? "User";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Learning_Management_System</title>
+    <link rel="stylesheet" href="~/bootswatch.css/bootstrap.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #4169E1;">
+            <div class="container-fluid">
+                @* LMS brand link changes by role *@
+                <a class="navbar-brand" href="@(
+                                        role == "student" ? Url.Action("Index", "StudentDashboard") :
+                                        role == "faculty" ? Url.Action("Index", "FacultyDashboard") :
+                                        Url.Action("Index", "AdminDashboard")
+                                )">LMS</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        @if (role == "student")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("Index", "StudentDashboard")">Home</a>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="coursesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Courses
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="coursesDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("OfferedCourses", "StudentDashboard")">Offered Courses</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("CurrentSemester", "StudentDashboard")">Current Semester</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "QuizAttempt")">Quizzes</a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    My Account
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="accountDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("ChangePassword", "Account")">Change Password</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        else if (role == "faculty")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("Index", "FacultyDashboard")">Home</a>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="facultyAccountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    My Account
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="facultyAccountDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("ChangePassword", "Account")">Change Password</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+
+                    @* Right side: Welcome text and Logout button *@
+                    @if (role == "student" || role == "faculty")
+                    {
+                        <span class="navbar-text text-white me-3">Welcome, @userName</span>
+
+                        <form class="d-inline" asp-controller="Account" asp-action="Logout" method="post">
+                            <button type="submit" class="btn btn-outline-light btn-sm">Sign Out</button>
+                        </form>
+                    }
+                    @if (role == "admin")
+                    {
+                        <span class="navbar-text text-white me-3">Welcome,Admin</span>
+
+                        <form class="d-inline" asp-controller="Account" asp-action="Logout" method="post">
+                            <button type="submit" class="btn btn-outline-light btn-sm">Sign Out</button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container mt-4">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted mt-5">
+        <div class="container">
+            &copy; 2025 - Learning_Management_System - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,137 @@
+﻿@model IEnumerable<Learning_Management_System.Models.ENTITIES.CourseOutline>
+
+@{
+    ViewData["Title"] = "Course Outline";
+    var courseId = ViewBag.CourseId;
+    var courseTitle = ViewBag.CourseTitle;
+    var courseCode = ViewBag.CourseCode;
+}
+
+<div class="container mt-4">
+    <div class="card recap-card">
+        <div class="card-header recap-header d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+                <i class="fas fa-book"></i> @courseTitle (@courseCode) - Course Outline
+            </h4>
+            <span class="badge bg-light text-dark">
+                @Model.Count() Weeks
+            </span>
+        </div>
+
+        <div class="card-body">
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-bordered recap-table">
+                        <thead>
+                            <tr>
+                                <th>Week</th>
+                                <th>Weekly Plan</th>
+                                <th>Topic</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var outline in Model.OrderBy(o => o.WeekNumber))
+                            {
+                                <tr>
+                                    <td class="text-center fw-bold">@outline.WeekNumber</td>
+                                    <td>@outline.WeeklyPlan</td>
+                                    <td>@outline.Topic</td>
+                                    <td>@outline.Description</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info recap-alert text-center">
+                    <i class="fas fa-file-alt fa-3x mb-2"></i>
+                    <h5>No course outline available</h5>
+                    <p>The course outline has not been published yet.</p>
+                </div>
+            }
+
+            <div class="mt-4">
+                <a asp-controller="StudentDashboard"
+                   asp-action="Index"
+                   class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Courses
+                </a>
+          
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Card */
+    .recap-card {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    /* Header */
+    .recap-header {
+        background-color: royalblue;
+        color: white;
+        border-radius: 10px 10px 0 0;
+        padding: 12px 20px;
+    }
+
+    /* Table */
+    .recap-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+        .recap-table th, .recap-table td {
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        .recap-table thead th {
+            background-color: royalblue;
+            color: white;
+            font-weight: 600;
+        }
+
+        .recap-table tbody tr {
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease;
+        }
+
+            .recap-table tbody tr:nth-child(even) {
+                background-color: #e9f1ff;
+            }
+
+            .recap-table tbody tr:hover {
+                background-color: #d0e4ff;
+            }
+
+    /* Alerts */
+    .recap-alert {
+        border-radius: 8px;
+    }
+
+    /* Buttons */
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+        border-radius: 6px;
+        padding: 8px 20px;
+        font-weight: 600;
+        transition: background-color 0.2s;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+</style>
