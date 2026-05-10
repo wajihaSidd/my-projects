@@ -1,7 +1,6 @@
 # Wajiha Siddiqui | CS Projects Portfolio 
 **Computer Science Student at SZABIST | CGPA: 3.58**
 
-Welcome to my project showcase. This repository contains my key academic and personal projects, demonstrating my skills in Full-Stack Development, Data Structures, and Software Engineering.
 
 ---
 
@@ -19,7 +18,7 @@ Welcome to my project showcase. This repository contains my key academic and per
 * **Key Features:** * Role-based access control for Admins, Instructors, and Students.
     * Course management and secure user authentication.
     * Optimized database schema for educational records.
-* **[View Project Files](./LMS-Project)** *(Currently being updated)*
+* **[View Project Files](./LMS-Project)** 
 
 ###  [Weather Forecast System](./src)
 * **Tech Stack:** Java, Data Structures (DSA).
