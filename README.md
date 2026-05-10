@@ -25,13 +25,13 @@
 
 ---
 
-### [Weather Forecast System](./WeatherForecast_Management_System)
+### [Weather Forecast System](./WeatherForecast-Management-System)
 * **Tech Stack:** Java, Data Structures (DSA).
 * **Key Features:**
     * Meteorological data management using custom Linked Lists.
     * Optimized search functionality using **Binary Search ($O(\log n)$)**.
     * CRUD operations for weather record maintenance.
-* **[View Project Files](./WeatherForecast_Management_System)**
+* **[View Project Files](./WeatherForecast-Management-System)**
 
 ---
 
