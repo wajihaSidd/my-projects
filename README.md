@@ -7,19 +7,28 @@
 
 ### [Learning Management System (LMS)](./Learning-Management-System)
 * **Tech Stack:** C# .NET Core, SQL Server.
-* **Key Features:** * Role-based access control for Admins, Instructors, and Students.
+* **Key Features:**
+    * Role-based access control for Admins, Instructors, and Students.
     * Course management and secure user authentication.
     * Optimized database schema for educational records.
-* **[View Project Files](./Learning-Management-System)** ### [Software House Management System](./softwareHouse_Management_System)
+* **[View Project Files](./Learning-Management-System)**
+
+---
+
+### [Software House Management System](./softwareHouse_Management_System)
 * **Tech Stack:** Node.js, Express.js, PostgreSQL, Chart.js, HTML/CSS/JS.
-* **Key Features:** * Full-stack system for tracking employee tasks and projects.
+* **Key Features:**
+    * Full-stack system for tracking employee tasks and projects.
     * Dynamic dashboard with data visualization using Chart.js.
     * RESTful API integration with a relational database.
 * **[View Project Files](./softwareHouse_Management_System)**
 
+---
+
 ### [Weather Forecast System](./WeatherForecast_Management_System)
 * **Tech Stack:** Java, Data Structures (DSA).
-* **Key Features:** * Meteorological data management using custom Linked Lists.
+* **Key Features:**
+    * Meteorological data management using custom Linked Lists.
     * Optimized search functionality using **Binary Search ($O(\log n)$)**.
     * CRUD operations for weather record maintenance.
 * **[View Project Files](./WeatherForecast_Management_System)**
